@@ -14,7 +14,7 @@ class _MyAppFormState extends State<MyAppForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 182, 205, 217),
+      backgroundColor: const Color.fromARGB(255, 182, 205, 217),
       body: ListView(
         padding: const EdgeInsets.symmetric(
           horizontal: 30.0,
@@ -26,7 +26,7 @@ class _MyAppFormState extends State<MyAppForm> {
             children: [
               const CircleAvatar(
                 radius: 100.0,
-                backgroundColor: Color.fromARGB(255, 198, 140, 39),
+                backgroundColor: Color.fromARGB(255, 252, 217, 158),
                 backgroundImage: AssetImage("images/tomate.png"),
               ),
               const Text(
@@ -41,9 +41,9 @@ class _MyAppFormState extends State<MyAppForm> {
                 autofocus: true,
                 textCapitalization: TextCapitalization.characters,
                 decoration: const InputDecoration(
-                  hintText: 'Nombre usuario',
-                  labelText: 'Usuario',
-                  suffixIcon: Icon(Icons.verified_user),
+                  hintText: 'Correo de usuario',
+                  labelText: 'Correo',
+                  suffixIcon: Icon(Icons.email),
                   border: OutlineInputBorder(),
                 ),
                 onSubmitted: (valor) {
@@ -57,7 +57,9 @@ class _MyAppFormState extends State<MyAppForm> {
               TextField(
                 obscureText: true,
                 decoration: const InputDecoration(
+                  hintText: 'Contraseña',
                   labelText: 'Contraseña',
+                  suffixIcon: Icon(Icons.password),
                   border: OutlineInputBorder(),
                 ),
                 onSubmitted: (valor) {
@@ -69,6 +71,7 @@ class _MyAppFormState extends State<MyAppForm> {
                 height: 15.0,
               ),
               TextButton(
+                style: TextButton.styleFrom(primary: Color.fromARGB(255, 142, 189, 144)),
                 child: const Text('Ingresar',
                     style: TextStyle(
                         color: Color.fromARGB(255, 75, 140, 206),
