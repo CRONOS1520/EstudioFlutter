@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:star_up/main.dart';
+import 'package:star_up/src/calendar.dart';
 
 class MyAppForm extends StatefulWidget {
   const MyAppForm({super.key});
@@ -10,6 +12,8 @@ class MyAppForm extends StatefulWidget {
 class _MyAppFormState extends State<MyAppForm> {
   String _nombre = '';
   String _password = '';
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +41,7 @@ class _MyAppFormState extends State<MyAppForm> {
                 height: 15.0,
               ),
               TextField(
+                controller: emailController,
                 enableInteractiveSelection: false,
                 autofocus: true,
                 textCapitalization: TextCapitalization.characters,
@@ -55,6 +60,7 @@ class _MyAppFormState extends State<MyAppForm> {
                 height: 15.0,
               ),
               TextField(
+                controller: passwordController,
                 obscureText: true,
                 decoration: const InputDecoration(
                   hintText: 'Contraseña',
@@ -71,18 +77,27 @@ class _MyAppFormState extends State<MyAppForm> {
                 height: 15.0,
               ),
               TextButton(
-                style: TextButton.styleFrom(primary: Color.fromARGB(255, 142, 189, 144)),
+                style: TextButton.styleFrom(
+                    primary: Color.fromARGB(255, 142, 189, 144)),
                 child: const Text('Ingresar',
                     style: TextStyle(
                         color: Color.fromARGB(255, 75, 140, 206),
                         fontSize: 30.0,
                         fontFamily: 'NerkoOne')),
-                onPressed: () {},
+                onPressed: () => redirectionCalendar(),
               )
             ],
           )
         ],
       ),
     );
+  }
+
+  void redirectionCalendar() {
+    if (emailController.text.toLowerCase() == 'nando' &&
+        passwordController.text.toLowerCase() == '123') {
+      Navigator.push(context,
+          new MaterialPageRoute(builder: (context) => new MyCalendar()));
+    }
   }
 }
