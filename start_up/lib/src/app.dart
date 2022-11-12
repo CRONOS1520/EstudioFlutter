@@ -77,11 +77,12 @@ class _MyAppFormState extends State<MyAppForm> {
                 height: 15.0,
               ),
               TextButton(
-                style: TextButton.styleFrom(
-                    primary: Color.fromARGB(255, 142, 189, 144)),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        Color.fromARGB(255, 74, 155, 255))),
                 child: const Text('Ingresar',
                     style: TextStyle(
-                        color: Color.fromARGB(255, 75, 140, 206),
+                        color: Color.fromARGB(255, 255, 255, 255),
                         fontSize: 30.0,
                         fontFamily: 'NerkoOne')),
                 onPressed: () => redirectionCalendar(),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyCalendar extends StatefulWidget {
   const MyCalendar({super.key});
@@ -34,8 +33,59 @@ class _MyCalendarSate extends State<MyCalendar> {
                 lastDay: DateTime.utc(2040, 10, 20),
                 focusedDay: _focusedDay,
               ),
+              const Divider(
+                height: 20.0,
+              ),
+              TextButton(
+                onPressed: () => agregarNota(),
+                child: Text(
+                  'AGREGAR NOTA DE ESTUDIO',
+                  style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                ),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.indigo)),
+              ),
+              const Divider(
+                height: 20.0,
+              ),
+              Text(
+                'LISTA DE TAREAS',
+                style: TextStyle(),
+                textAlign: TextAlign.left,
+              ),
             ],
           )
         ]));
+  }
+
+  void agregarNota() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              scrollable: true,
+              title: Text('Agregar Nota'),
+              content: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Form(
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Titulo Tarea',
+                          icon: Icon(Icons.title),
+                        ),
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Detalle',
+                          icon: Icon(Icons.message),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ));
+        });
   }
 }
