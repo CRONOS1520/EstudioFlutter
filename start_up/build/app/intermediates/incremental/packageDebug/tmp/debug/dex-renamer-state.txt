@@ -1,4 +1,4 @@
-#Sat Nov 12 03:44:13 COT 2022
+#Wed Nov 16 21:22:54 COT 2022
 base.0=C\:\\RepositorioGit\\EstudioFlutter\\start_up\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 renamed.0=classes.dex
 path.0=classes.dex

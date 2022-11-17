@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:star_up/main.dart';
+import 'package:star_up/models/UsuarioApi.dart';
+import 'package:star_up/models/entities/Usuario.dart';
 import 'package:star_up/src/calendar.dart';
+import 'package:star_up/src/registro.dart';
 
 class MyAppForm extends StatefulWidget {
   const MyAppForm({super.key});
@@ -10,6 +13,25 @@ class MyAppForm extends StatefulWidget {
 }
 
 class _MyAppFormState extends State<MyAppForm> {
+  List<Usuario>? usuarios;
+  var isLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _getRecord();
+  }
+
+  _getRecord() async {
+    usuarios = await UsuariosApi().getAllUsuarios();
+    if (usuarios != null) {
+      setState(() {
+        isLoaded = true;
+      });
+      print(usuarios);
+    }
+  }
+
   String _nombre = '';
   String _password = '';
   TextEditingController emailController = new TextEditingController();
@@ -43,7 +65,6 @@ class _MyAppFormState extends State<MyAppForm> {
               TextField(
                 controller: emailController,
                 enableInteractiveSelection: false,
-                autofocus: true,
                 textCapitalization: TextCapitalization.characters,
                 decoration: const InputDecoration(
                   hintText: 'Correo de usuario',
@@ -79,13 +100,27 @@ class _MyAppFormState extends State<MyAppForm> {
               TextButton(
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                        Color.fromARGB(255, 74, 155, 255))),
+                        Color.fromARGB(255, 70, 152, 253))),
                 child: const Text('Ingresar',
                     style: TextStyle(
                         color: Color.fromARGB(255, 255, 255, 255),
                         fontSize: 30.0,
                         fontFamily: 'NerkoOne')),
                 onPressed: () => redirectionCalendar(),
+              ),
+              const Divider(
+                height: 15.0,
+              ),
+              TextButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        Color.fromARGB(255, 255, 255, 255))),
+                child: const Text('Registrate',
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 70, 152, 253),
+                        fontSize: 30.0,
+                        fontFamily: 'NerkoOne')),
+                onPressed: () => redirectionRegistro(),
               )
             ],
           )
@@ -100,5 +135,10 @@ class _MyAppFormState extends State<MyAppForm> {
       Navigator.push(context,
           new MaterialPageRoute(builder: (context) => new MyCalendar()));
     }
+  }
+
+  void redirectionRegistro() {
+    Navigator.push(
+        context, new MaterialPageRoute(builder: (context) => new MyRegistro()));
   }
 }
