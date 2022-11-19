@@ -12,6 +12,10 @@
         "source": "C:\\RepositorioGit\\EstudioFlutter\\start_up\\android\\app\\src\\main\\res\\drawable-v21\\launch_background.xml"
     },
     {
+        "merged": "C:\\RepositorioGit\\EstudioFlutter\\start_up\\build\\app\\intermediates\\merged_res\\debug\\drawable_icono_notificacion.png.flat",
+        "source": "C:\\RepositorioGit\\EstudioFlutter\\start_up\\android\\app\\src\\main\\res\\drawable\\icono_notificacion.png"
+    },
+    {
         "merged": "C:\\RepositorioGit\\EstudioFlutter\\start_up\\build\\app\\intermediates\\merged_res\\debug\\mipmap-xxhdpi_ic_launcher.png.flat",
         "source": "C:\\RepositorioGit\\EstudioFlutter\\start_up\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
     },

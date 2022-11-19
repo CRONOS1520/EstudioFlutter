@@ -4,6 +4,7 @@ import 'package:star_up/models/UsuarioApi.dart';
 import 'package:star_up/models/entities/Usuario.dart';
 import 'package:star_up/src/calendar.dart';
 import 'package:star_up/src/registro.dart';
+import 'globals.dart' as globals;
 
 class MyAppForm extends StatefulWidget {
   const MyAppForm({super.key});
@@ -16,26 +17,18 @@ class _MyAppFormState extends State<MyAppForm> {
   List<Usuario>? usuarios;
   var isLoaded = false;
 
+  String _nombre = '';
+  String _clave = '';
+  TextEditingController nombreController = new TextEditingController();
+  TextEditingController claveController = new TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    _getRecord();
+    globals.usuario = new Usuario();
+    globals.diaSeleccionado = DateTime.now();
+    globals.listaNotas = [];
   }
-
-  _getRecord() async {
-    usuarios = await UsuariosApi().getAllUsuarios();
-    if (usuarios != null) {
-      setState(() {
-        isLoaded = true;
-      });
-      print(usuarios);
-    }
-  }
-
-  String _nombre = '';
-  String _password = '';
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +56,12 @@ class _MyAppFormState extends State<MyAppForm> {
                 height: 15.0,
               ),
               TextField(
-                controller: emailController,
+                controller: nombreController,
                 enableInteractiveSelection: false,
                 textCapitalization: TextCapitalization.characters,
                 decoration: const InputDecoration(
-                  hintText: 'Correo de usuario',
-                  labelText: 'Correo',
+                  hintText: 'Nombre de usuario',
+                  labelText: 'Nombre',
                   suffixIcon: Icon(Icons.email),
                   border: OutlineInputBorder(),
                 ),
@@ -81,7 +74,7 @@ class _MyAppFormState extends State<MyAppForm> {
                 height: 15.0,
               ),
               TextField(
-                controller: passwordController,
+                controller: claveController,
                 obscureText: true,
                 decoration: const InputDecoration(
                   hintText: 'Contraseña',
@@ -90,8 +83,8 @@ class _MyAppFormState extends State<MyAppForm> {
                   border: OutlineInputBorder(),
                 ),
                 onSubmitted: (valor) {
-                  _password = valor;
-                  print('El nombre es: $_password');
+                  _clave = valor;
+                  print('El nombre es: $_clave');
                 },
               ),
               const Divider(
@@ -129,16 +122,55 @@ class _MyAppFormState extends State<MyAppForm> {
     );
   }
 
-  void redirectionCalendar() {
-    if (emailController.text.toLowerCase() == 'nando' &&
-        passwordController.text.toLowerCase() == '123') {
-      Navigator.push(context,
-          new MaterialPageRoute(builder: (context) => new MyCalendar()));
+  void redirectionCalendar() async {
+    List<Usuario>? usuarios =
+        await UsuariosApi().getAllUsuarios() as List<Usuario>;
+    bool esIgual = false;
+
+    if (usuarios != null) {
+      usuarios.forEach((usuario) {
+        if (!esIgual) {
+          esIgual =
+              (usuario.nombre?.compareTo(nombreController.text.trim()) == 0 &&
+                  usuario.clave?.compareTo(claveController.text.trim()) == 0);
+          globals.usuario = usuario;
+        }
+      });
+
+      if (esIgual) {
+        Navigator.push(context,
+            new MaterialPageRoute(builder: (context) => new MyCalendar()));
+        claveController.text = "";
+        nombreController.text = "";
+        return;
+      }
     }
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              backgroundColor: Color.fromARGB(255, 245, 230, 130),
+              scrollable: true,
+              title: Text('Mensaje de alerta'),
+              content: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Form(
+                  child: Column(
+                    children: <Widget>[
+                      const Text(
+                        'El nombre o contraseña incorrecta',
+                      ),
+                    ],
+                  ),
+                ),
+              ));
+        });
   }
 
   void redirectionRegistro() {
     Navigator.push(
         context, new MaterialPageRoute(builder: (context) => new MyRegistro()));
+    claveController.text = "";
+    nombreController.text = "";
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:star_up/models/UsuarioApi.dart';
 import 'package:star_up/models/entities/Usuario.dart';
+import 'package:star_up/src/app.dart';
 
 class MyRegistro extends StatefulWidget {
   const MyRegistro({super.key});
@@ -109,62 +110,137 @@ class _MyRegistroState extends State<MyRegistro> {
   }
 
   void registrarUsuario() async {
-    if (claveController.text.trim().isEmpty &&
-        emailController.text.trim().isEmpty &&
-        nombreController.text.trim().isEmpty) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-                scrollable: true,
-                title: Text('Mensaje de alerta'),
-                content: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Form(
-                    child: Column(
-                      children: <Widget>[
-                        const Text(
-                          'Todos los campos son obligatorios',
-                        ),
-                      ],
-                    ),
-                  ),
-                ));
-          });
-      return;
-    }
-
-    List<Usuario>? usuarios =
-        await UsuariosApi().getAllUsuarios() as List<Usuario>;
-    bool esIgual = false;
-
-    if (usuarios != null) {
-      usuarios.forEach((usuario) {
-        esIgual = usuario.nombre?.compareTo(nombreController.text.trim()) == 0;
-
-        if (esIgual) {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                    scrollable: true,
-                    title: Text('Mensaje de alerta'),
-                    content: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Form(
-                        child: Column(
-                          children: <Widget>[
-                            const Text(
-                              'El nombre de usuario ya se encuentra en uso',
-                            ),
-                          ],
-                        ),
+    try {
+      if (claveController.text.trim().isEmpty &&
+          emailController.text.trim().isEmpty &&
+          nombreController.text.trim().isEmpty) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                  backgroundColor: Color.fromARGB(255, 245, 230, 130),
+                  scrollable: true,
+                  title: Text('Mensaje de alerta'),
+                  content: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Form(
+                      child: Column(
+                        children: <Widget>[
+                          const Text(
+                            'Todos los campos son obligatorios',
+                          ),
+                        ],
                       ),
-                    ));
-              });
-          return;
-        }
-      });
+                    ),
+                  ));
+            });
+        return;
+      }
+
+      List<Usuario>? usuarios = await UsuariosApi()
+          .getUsuario(nombreController.text.trim()) as List<Usuario>;
+      bool esIgual = false;
+
+      if (usuarios != null) {
+        usuarios.forEach((usuario) {
+          if (!esIgual) {
+            esIgual =
+                usuario.nombre?.compareTo(nombreController.text.trim()) == 0;
+
+            if (esIgual) {
+              return;
+            }
+          }
+        });
+      }
+
+      if (esIgual) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                  backgroundColor: Color.fromARGB(255, 245, 230, 130),
+                  scrollable: true,
+                  title: Text('Mensaje de alerta'),
+                  content: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Form(
+                      child: Column(
+                        children: <Widget>[
+                          const Text(
+                            'El nombre de usuario ya se encuentra en uso',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ));
+            });
+        return;
+      }
+
+      Usuario usuario = new Usuario(
+          clave: claveController.text.toString().trim(),
+          nombre: nombreController.text.toString().trim(),
+          email: emailController.text.toString().trim());
+
+      List<Usuario> listaUsuarios = [];
+      listaUsuarios.add(usuario);
+
+      bool seGuardo = await UsuariosApi().addUsuario(listaUsuarios);
+
+      if (seGuardo) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                  backgroundColor: Color.fromARGB(255, 143, 235, 120),
+                  scrollable: true,
+                  title: Text('Mensaje'),
+                  content: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Form(
+                      child: Column(
+                        children: <Widget>[
+                          const Text(
+                            'El usuario se registro con exito',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ));
+            });
+        claveController.text = "";
+        nombreController.text = "";
+        emailController.text = "";
+      } else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                  backgroundColor: Color.fromARGB(255, 245, 230, 130),
+                  scrollable: true,
+                  title: Text('Mensaje de alerta'),
+                  content: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Form(
+                      child: Column(
+                        children: <Widget>[
+                          const Text(
+                            'Ocurrió  un error al momento de registrar el usuario',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ));
+            });
+      }
+    } catch (e) {
+      print(e);
     }
+  }
+
+  void retornarPantalla() {
+    Navigator.push(
+        context, new MaterialPageRoute(builder: (context) => new MyAppForm()));
   }
 }
